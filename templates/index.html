@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Dashboard</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Current Balance</h5>
+                    <h2 class="card-text">{{ user_balance | usd }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Last Income</h5>
+                    {% if last_income_entry %}
+                        <h2 class="card-text">{{ last_income_entry.amount | usd }}</h2>
+                        <p>Description: {{ last_income_entry.description }}</p>
+                        <p>Date: {{ last_income_entry.time }}</p>
+                        <p>Category: {{ last_income_entry.category }}</p>
+                    {% else %}
+                        <h2 class="card-text">No income entries found.</h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Transaction History</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Category</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.time }}</td>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.category }}</td>
+                    <td>{{ transaction.amount | usd }}</td>
+                    <td>{{ transaction.description }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No transactions found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

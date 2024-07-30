@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}Transaction History{% endblock %}
+
+{% block content %}
+<h2>Transaction History</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.time }}</td>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.amount | usd }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>
+                        <i class="fa {{ 'fa-money' if transaction.type == 'income' else 'fa-shopping-cart' }}"></i>
+                        {{ transaction.category }}
+                    </td>
+                    <td>
+                        <form action="/delete_transaction" method="post" style="display:inline;">
+                            <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    style="padding: 0.3rem 0.5rem; font-size: 0.8rem; max-width: 80px;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No transactions found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
